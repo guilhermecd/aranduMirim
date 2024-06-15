@@ -22,7 +22,7 @@ SIZE = (WIDTH, HEIGHT)
 FPS = 120
 TITLE = ''
 BGCOLOR = WHITE
-GPS_ERR = .2    # erro do GPS
+GPS_ERR = .2
 
 DEBUG = True
 SIMULATE = True
@@ -30,4 +30,4 @@ SAVE_ROUTES = False
 SHOW_FPS = True
 
 # version software and modification
-VERSION = "3.14" #configurando GPS filtros 
+VERSION = "3.14"

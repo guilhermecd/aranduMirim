@@ -1,3 +1,3 @@
 from .base import Base
-from .SpellingGame import ScreenSpelling
+from .spellingGame import ScreenSpelling
 from .start import ScreenStart

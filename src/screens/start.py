@@ -29,7 +29,6 @@ class ScreenStart(Base):
 
     def render(self):
         super(ScreenStart, self).render()
-        self.navi_btn.update(self.screen)
         self.demo_btn.update(self.screen)
         self.exit_btn.update(self.screen)
         self.navi_lb.update(self.screen)

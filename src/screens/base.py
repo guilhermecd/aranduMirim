@@ -50,9 +50,4 @@ class Base:
 
 
     def terminate(self):
-        os_info = os.uname()
-        if os_info.nodename == "raspberrypi":
-            # os.popen("poweroff")
-            self.switch_to_scene(None)
-        else:
-            self.switch_to_scene(None)
+        self.switch_to_scene(None)
