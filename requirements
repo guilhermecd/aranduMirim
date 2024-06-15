@@ -1,0 +1,4 @@
+peewee==3.17.1
+pygame==2.5.2
+utm==0.7.0
+webencodings==0.5.1
