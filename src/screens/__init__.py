@@ -1,3 +1,5 @@
 from .base import Base
-from .spellingGame import ScreenSpelling
+from .soletrar import ScreenSoletrar
+from .spellingImage import ScreenSpellingImage
+from .ranking import Ranking
 from .start import ScreenStart

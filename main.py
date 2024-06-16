@@ -4,7 +4,6 @@ from src.database import start_model
 from src.screens import ScreenStart
 from src.utils.settings import FPS, WIDTH, HEIGHT, SHOW_FPS
 from subprocess import Popen
-import subprocess
 
 def run(width, height, fps):
     # criar a base de dados se não houver com os valores padrões
@@ -12,6 +11,7 @@ def run(width, height, fps):
     pg.init()
     size = (width, height)
     flags = pg.HWSURFACE | pg.DOUBLEBUF
+    #flags = pg.FULLSCREEN
     screen = pg.display.set_mode(size, flags)
     clock = pg.time.Clock()
     pg.event.set_allowed([MOUSEBUTTONDOWN, MOUSEBUTTONUP, KEYDOWN, QUIT,
