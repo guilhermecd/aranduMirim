@@ -9,18 +9,16 @@ class ScreenSoletrar(Base):
     def __init__(self, screen):
         Base.__init__(self, "SOLETRAR", screen)
         self.screen = screen
-        self.dic_alfabeto = {'a' : 'A', 'b' : 'B', 'c' : 'C', 'd' : 'D',
-                          'e' : 'E', 'f' : 'F', 'g' : 'G', 'h' : 'H',
-                          'i' : 'I', 'j' : 'J', 'k' : 'K', 'l' : 'L',
-                          'm' : 'M', 'n' : 'N', 'o' : 'O', 'p' : 'P',
-                          'q' : 'Q', 'r' : 'R', 's' : 'S', 't' : 'T',
-                          'u' : 'U', 'v' : 'V', 'v' : 'V', 'x' : 'X',
-                          'y' : 'Y', 'z' : 'Z'}
-        self.conjunto1 = ['a', 'g', 'o', 't']
-        self.alfabeto_1_image = pg.image.load('images/soletra/' + self.conjunto1[0] + '.png').convert_alpha()
-        self.alfabeto_2_image = pg.image.load('images/soletra/' + self.conjunto1[1] + '.png').convert_alpha()
-        self.alfabeto_3_image = pg.image.load('images/soletra/' + self.conjunto1[2] + '.png').convert_alpha()
-        self.alfabeto_4_image = pg.image.load('images/soletra/' + self.conjunto1[3] + '.png').convert_alpha()
+        self.dic_esp32 = {1 : 'G', 2 : 'A', 3 : 'T', 4 : 'O'}
+        self.scenario = (['a', 'g', 'o', 't', 'l'], ['e', 'r', 't', 'p', 'a'], ['a', 'c', 'g', 'i', 'f'])
+        self.dic_words = (['GATO', 'GALO', 'LATA', 'GOL', 'TALO'], ['RETA', 'PARE', 'PERA'], ['FICA', 'FACA', 'CIA'])
+        self.indice = 0
+        self.current_scenario = self.scenario[self.indice]
+        self.alfabeto_1_image = pg.image.load('images/soletra/' + self.current_scenario[0] + '.png').convert_alpha()
+        self.alfabeto_2_image = pg.image.load('images/soletra/' + self.current_scenario[1] + '.png').convert_alpha()
+        self.alfabeto_3_image = pg.image.load('images/soletra/' + self.current_scenario[2] + '.png').convert_alpha()
+        self.alfabeto_4_image = pg.image.load('images/soletra/' + self.current_scenario[3] + '.png').convert_alpha()
+        self.alfabeto_5_image = pg.image.load('images/soletra/' + self.current_scenario[4] + '.png').convert_alpha()
         BUTTON_STYLE = {
             'hover_color': BLACK,
             'clicked_color': BLACK,
@@ -39,7 +37,16 @@ class ScreenSoletrar(Base):
 
 
     def control_skip_bt(self):
-        pass
+        if self.indice < len(self.scenario) - 1: 
+            self.indice += 1
+        else:
+            self.indice = 0
+        self.current_scenario = self.scenario[self.indice]
+        self.alfabeto_1_image = pg.image.load('images/soletra/' + self.current_scenario[0] + '.png').convert_alpha()
+        self.alfabeto_2_image = pg.image.load('images/soletra/' + self.current_scenario[1] + '.png').convert_alpha()
+        self.alfabeto_3_image = pg.image.load('images/soletra/' + self.current_scenario[2] + '.png').convert_alpha()
+        self.alfabeto_4_image = pg.image.load('images/soletra/' + self.current_scenario[3] + '.png').convert_alpha()
+        self.alfabeto_5_image = pg.image.load('images/soletra/' + self.current_scenario[4] + '.png').convert_alpha()
 
 
     def process_input(self, events, pressed_keys):
@@ -51,7 +58,8 @@ class ScreenSoletrar(Base):
         super(ScreenSoletrar, self).render()
         self.skip_bt.update(self.screen)
         self.menu_bt.update(self.screen)
-        self.screen.blit(self.alfabeto_1_image, (100, 280))
-        self.screen.blit(self.alfabeto_2_image, (160, 420))
-        self.screen.blit(self.alfabeto_3_image, (310, 420))
-        self.screen.blit(self.alfabeto_4_image, (370, 280))                
+        self.screen.blit(self.alfabeto_1_image, (105, 220)) #superior esquerdo
+        self.screen.blit(self.alfabeto_4_image, (355, 220)) #superior direito
+        self.screen.blit(self.alfabeto_2_image, (100, 410)) #inferior esquerdo
+        self.screen.blit(self.alfabeto_3_image, (360, 410)) #inferior direito
+        self.screen.blit(self.alfabeto_5_image, (230, 320)) #central

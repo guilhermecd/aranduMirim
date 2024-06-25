@@ -40,10 +40,9 @@ class ScreenSpellingImage(Base):
     def control_skip_bt(self):
         if self.indice < len(self.image_name)-1:
             self.indice += 1
-            self.current_image = pg.image.load('images/ortografiaAnimais/' + str(self.image_name[self.indice]) + '.png').convert_alpha()
         else:
             self.indice = 0
-            self.current_image = pg.image.load('images/ortografiaAnimais/' + str(self.image_name[self.indice]) + '.png').convert_alpha()
+        self.current_image = pg.image.load('images/ortografiaAnimais/' + str(self.image_name[self.indice]) + '.png').convert_alpha()
 
     def check_formed_word(self):
         palavra_cubos = ''
