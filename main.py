@@ -18,6 +18,7 @@ def run(width, height, fps):
                           USEREVENT])
     # indica a cena inicial
     active_scene = ScreenStart(screen)
+    pg.mixer.init()
     while active_scene != None:
         pressed_keys = pg.key.get_pressed()
         filtered_events = []

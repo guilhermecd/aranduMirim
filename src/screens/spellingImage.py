@@ -11,6 +11,15 @@ class ScreenSpellingImage(Base):
     def __init__(self, screen):
         Base.__init__(self, "ORTOGRAFIA", screen)
         self.screen = screen
+        #help buttons
+        self.help_bt_img = ButtonImage('images/duvidas32_32.png', (980, 20),
+                                    self.control_help_bt_img, ())
+        self.close_help_bt_img = ButtonImage('images/close.png', (766, 120),
+                                    self.control_help_bt_img, ())
+        self.help_enable = False
+        self.help_img = pg.image.load('images/helpme.jpg').convert_alpha()
+        self.close_help_img = pg.image.load('images/close.png').convert_alpha()
+
         self.dic_image = {1 : "GATO", 2 : "URSO", 3 : "TATU", 4 : "LEAO", 5 : "VACA", 6 : "LOBO", 7: "RATO", 8 : "PATO"}
         self.image_name = [1, 2, 3, 4, 5, 6, 7, 8]
         random.shuffle(self.image_name) 
@@ -37,6 +46,9 @@ class ScreenSpellingImage(Base):
     def control_menu_bt(self):
         self.go_back('ScreenStart',)
 
+    def control_help_bt_img(self):
+        self.help_enable = not self.help_enable
+
     def control_skip_bt(self):
         if self.indice < len(self.image_name)-1:
             self.indice += 1
@@ -57,7 +69,8 @@ class ScreenSpellingImage(Base):
         for event in events:
             self.skip_bt.check_event(event)
             self.menu_bt.check_event(event)
-
+            self.help_bt_img.check_event(event)
+            self.close_help_bt_img.check_event(event)
 
     def render(self):
         super(ScreenSpellingImage, self).render()
@@ -71,6 +84,9 @@ class ScreenSpellingImage(Base):
         self.letter3_ibox.update()
         self.letter4_ibox.draw(self.screen)
         self.letter4_ibox.update()
+        self.help_bt_img.update(self.screen)
         self.screen.blit(self.current_image, (240, 90))
-
+        if self.help_enable:
+            self.screen.blit(self.help_img, (242, 140))
+            self.close_help_bt_img.update(self.screen)
         self.check_formed_word()

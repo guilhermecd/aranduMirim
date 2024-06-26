@@ -6,7 +6,7 @@ from src.utils import ButtonImage, LabelText
 class ScreenStart(Base):
 
     def __init__(self, screen):
-        Base.__init__(self, "ARANDU MIRIM", screen)
+        Base.__init__(self, "", screen)
         self.screen = screen
         self.soletrar_btn = ButtonImage('images/soletrar.png', (193, 330),
                                     self.change_scene, (ScreenSoletrar,))
@@ -17,6 +17,7 @@ class ScreenStart(Base):
         self.soletrar_lb = LabelText ("Soletrar", (270, 506), size=40)
         self.spelling_lb = LabelText ("Ortografia", (752, 506), size=40)
         self.ranking_lb = LabelText ("Ranking", (752, 290), size=40)
+        self.logo_game = pg.image.load('images/aranduMain.png').convert_alpha()
 
     def process_input(self, events, pressed_keys):
         for event in events:
@@ -29,6 +30,7 @@ class ScreenStart(Base):
 
     def render(self):
         super(ScreenStart, self).render()
+        self.screen.blit(self.logo_game, (0, 0))
         #buttons
         self.soletrar_btn.update(self.screen)
         self.spelling_btn.update(self.screen)
