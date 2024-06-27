@@ -28,7 +28,7 @@ class ButtonImage(object):
             button.update(screen)
     """
 
-    def __init__(self, image_name, position, function, args=()):
+    def __init__(self, image_name, position, function, args=(), hover_image_path=None, alpha=255):
         self.position = position
         self.image = pg.image.load(image_name).convert_alpha()
         img_hover = image_name.split('.')
@@ -37,6 +37,7 @@ class ButtonImage(object):
             self.image_h = pg.image.load(img_hover).convert_alpha()
         except:
             self.image_h = pg.image.load(image_name).convert_alpha()
+     
         self.rect = pg.Rect(position, self.image.get_rect().size)
         self.function = function
         self.args = args
@@ -110,7 +111,6 @@ class ButtonImage(object):
 
     def get_position(self):
         return self.rect.center
-
 
     def update(self,screen):
         if self.visible:

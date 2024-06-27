@@ -10,7 +10,7 @@ class ScreenStart(Base):
         self.screen = screen
         self.soletrar_btn = ButtonImage('images/soletrar.png', (200, 290),
                                     self.change_scene, (ScreenSoletrar,))
-        self.spelling_btn = ButtonImage('images/ortografia.png', (400, 290),
+        self.spelling_btn = ButtonImage('images/ortografia.png', (450, 290),
                                     self.change_scene, (ScreenSpellingImage,))
         self.ranking_btn = ButtonImage('images/ranking.png', (700, 290),
                                     self.change_scene, (Ranking,))

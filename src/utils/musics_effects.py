@@ -15,3 +15,9 @@ class MusicEffects():
         pg.mixer.music.play()
         while pg.mixer.music.get_busy() == True:
             continue
+
+    def points(self):
+        pg.mixer.music.load('sounds/point.mp3')#test sound
+        pg.mixer.music.play()
+        while pg.mixer.music.get_busy() == True:
+            continue
