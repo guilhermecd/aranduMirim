@@ -2,10 +2,12 @@ import queue
 import pygame as pg
 import time
 from src.screens import Base
-from src.utils import ButtonImage, Button
+from src.utils import ButtonImage, Button, VKeyboard, VKeyboardLayout, InputBox, LabelText
 from src.utils.settings import WHITE, BLACK, LIGHTGREY, T_DARK_GREEN
 from src.utils.serial_info import SerialInfo
 from src.utils.musics_effects import MusicEffects
+from src.database import Ranking
+from datetime import datetime
 
 class ScreenSoletrar(Base):
     """Jogo para aprender a soletrar"""
@@ -63,7 +65,33 @@ class ScreenSoletrar(Base):
         self.palavras_acertadas = [[], [], []]
         self.total_palavras_acertadas = 0
 
-    
+        # inicialização do teclado virtual
+        self.name_field = InputBox(100, 100, 805, 48, '#ffffff', '#ffffff',
+                                   font_size=48)
+        kb_model = ['1234567890,', 'qwertyuiop', 'asdfghjklç', 'zxcvbnm']
+        kb_layout = VKeyboardLayout(kb_model, key_size=65, padding=8, x_pos=0,
+                                    y_pos=0, allow_special_chars=False)
+        self.keyboard = VKeyboard(screen, self.consumer, kb_layout)
+        self.keyboard.enable()
+        # controle da mensagem caso já exista algum nome de talhão
+        self.warning_has_name = False
+        self.has_name_lb = LabelText('', (512, 190), (255, 255, 255), 36,
+                                     background=(234, 67, 53), box=True)
+        # controle da mensagem caso o tamanho do nome tenha excedido
+        self.warning_size_full = False
+        self.info_size = LabelText('Tamanho do texto excedido!', (512, 190),
+                                   (255, 255, 255), 36,
+                                   background=(234, 67, 53), box=True)
+    def consumer(self, text):
+        size, _ = self.name_field.font.size(text)
+        if size > self.name_field.rect.width - 10:
+            self.warning_size_full = True
+            pg.time.set_timer(pg.USEREVENT + 1, 3000)
+            self.keyboard.buffer = self.keyboard.buffer[:-1]
+        else:
+            self.name_field.text = text
+            self.name_field.re_render_text()
+
     def cache_images(self):
         self.images_cache = {}
         for letter in self.current_scenario:
@@ -110,12 +138,21 @@ class ScreenSoletrar(Base):
                 # self.musics.game_Over()
                 self.slots_serial.clean_slots()
 
+    def store_ranking():
+        oneRanking = Ranking.create(
+            name = "Guilhermet",
+            date = datetime.now(),
+            score = 32
+        )    
+
+
     def process_input(self, events, pressed_keys):
         for event in events:
             # self.skip_bt.check_event(event)
             self.menu_bt.check_event(event)
             self.help_bt_img.check_event(event)
             self.close_help_bt_img.check_event(event)
+            self.keyboard.on_event(event)
 
     def render(self):
         while not self.data_queue.empty():
@@ -148,6 +185,7 @@ class ScreenSoletrar(Base):
                 text = ', '.join(palavras)
                 text_render = font_palavras.render(f'Palavras Acertadas Cenário {i+1}: {text}', True, LIGHTGREY)
                 self.screen.blit(text_render, (570, 210 + i * 30))
+
 
             # Atualizar o timer
             if self.timer_active:

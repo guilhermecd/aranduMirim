@@ -33,8 +33,8 @@ class ScrollList(object):
         self.list_header = list_header
 
         self.list_content = list_content
-        self.color_lines = ((29, 110, 166), (86, 81, 78))
-        self.color_header = (0, 0,0)
+        self.color_lines = ((250, 250, 250), (232, 232, 232))
+        self.color_header = (200,200,27)
         self.__load_data()
         self.__load_config()
         self.__create_bar()
@@ -62,7 +62,7 @@ class ScrollList(object):
         self.width_cell = 900 / self.colunms
         self.height_cell = 40
         self.type_font = None
-        self.color_text = (255, 255, 255)
+        self.color_text = (0, 0, 0)
         self.size_text = 32
         self.speed_scroll = 15
         self.scroll_y = 0

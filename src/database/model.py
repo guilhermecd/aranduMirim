@@ -18,7 +18,7 @@ class BaseModel(peewee.Model):
 class Ranking(BaseModel):
     name = peewee.CharField()
     score = peewee.IntegerField()
-    data = peewee.DateTimeField()
+    date = peewee.DateTimeField()
 
 
 def start_model():
