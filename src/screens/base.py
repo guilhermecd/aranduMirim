@@ -38,7 +38,7 @@ class Base:
 
 
     def render(self):
-        self.screen.fill((66, 66, 66))
+        self.screen.fill((66, 66, 66, 0))
         self.screen.blit(self.bar_label, self.bar_rect)
 
 

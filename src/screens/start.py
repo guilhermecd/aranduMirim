@@ -10,14 +10,11 @@ class ScreenStart(Base):
         self.screen = screen
         self.soletrar_btn = ButtonImage('images/soletrar.png', (193, 330),
                                     self.change_scene, (ScreenSoletrar,))
-        self.spelling_btn = ButtonImage('images/spelling.png', (675, 330),
+        self.spelling_btn = ButtonImage('images/ortografia.png', (675, 330),
                                     self.change_scene, (ScreenSpellingImage,))
         self.ranking_btn = ButtonImage('images/ranking.png', (675, 114),
                                     self.change_scene, (Ranking,))
-        self.soletrar_lb = LabelText ("Soletrar", (270, 506), size=40)
-        self.spelling_lb = LabelText ("Ortografia", (752, 506), size=40)
-        self.ranking_lb = LabelText ("Ranking", (752, 290), size=40)
-        self.logo_game = pg.image.load('images/aranduMain.png').convert_alpha()
+        self.logo_game = pg.image.load('images/aranduMirim.png').convert_alpha()
 
     def process_input(self, events, pressed_keys):
         for event in events:
@@ -35,7 +32,3 @@ class ScreenStart(Base):
         self.soletrar_btn.update(self.screen)
         self.spelling_btn.update(self.screen)
         self.ranking_btn.update(self.screen)
-        #labels
-        self.soletrar_lb.update(self.screen)
-        self.spelling_lb.update(self.screen)
-        self.ranking_lb.update(self.screen)

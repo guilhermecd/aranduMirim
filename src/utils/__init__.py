@@ -6,3 +6,5 @@ from .button import Button
 from .scroll_list import ScrollList
 from .settings import *
 from .dialog import Dialog
+from .serial_info import SerialInfo
+from .musics_effects import MusicEffects

@@ -2,18 +2,16 @@ import pygame as pg
 from pygame.locals import *
 from src.database import start_model
 from src.screens import ScreenStart
-from src.utils.settings import FPS, WIDTH, HEIGHT, SHOW_FPS
-from subprocess import Popen
+from src.utils.settings import WIDTH, HEIGHT
 
-def run(width, height, fps):
+def run(width, height):
     # criar a base de dados se não houver com os valores padrões
     start_model()
     pg.init()
     size = (width, height)
-    flags = pg.HWSURFACE | pg.DOUBLEBUF
+    flags = pg.SRCALPHA
     #flags = pg.FULLSCREEN
     screen = pg.display.set_mode(size, flags)
-    clock = pg.time.Clock()
     pg.event.set_allowed([MOUSEBUTTONDOWN, MOUSEBUTTONUP, KEYDOWN, QUIT,
                           USEREVENT])
     # indica a cena inicial
@@ -56,4 +54,4 @@ def run(width, height, fps):
 
 
 if __name__ == '__main__':
-    run(WIDTH, HEIGHT, FPS)
+    run(WIDTH, HEIGHT)

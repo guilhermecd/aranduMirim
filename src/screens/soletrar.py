@@ -2,22 +2,26 @@ import pygame as pg
 from src.screens import Base
 from src.utils import ButtonImage, Button
 from src.utils.settings import WHITE, BLACK
+from src.utils.serial_info import SerialInfo
+from src.utils.musics_effects import MusicEffects
 
 class ScreenSoletrar(Base):
     """Jogo para aprender a soletrar"""
 
     def __init__(self, screen):
-        Base.__init__(self, "SOLETRAR", screen)
+        Base.__init__(self, "", screen)
+        self.logo_game = pg.image.load('images/Arandu-Mirim-Soletrando.png').convert_alpha()
         self.screen = screen
         self.help_bt_img = ButtonImage('images/duvidas32_32.png', (980, 20),
                                     self.control_help_bt_img, ())
-        self.close_help_bt_img = ButtonImage('images/close.png', (766, 120),
+        self.close_help_bt_img = ButtonImage('images/close.png', (758, 153),
                                     self.control_help_bt_img, ())
         self.help_enable = False
-        self.help_img = pg.image.load('images/helpme.jpg').convert_alpha()
-        self.close_help_img = pg.image.load('images/close.png').convert_alpha()
-        
-        self.dic_esp32 = {1 : 'G', 2 : 'A', 3 : 'T', 4 : 'O'}
+        self.help_img = pg.image.load('images/Arandu-Mirim-Soletrando-com-FAQ.png').convert_alpha()
+
+        self.musics = MusicEffects()
+        self.slots_serial = SerialInfo()
+        self.dic_esp32 = self.slots_serial.get_slots()
         self.scenario = (['a', 'g', 'o', 't', 'l'], ['e', 'r', 't', 'p', 'a'], ['a', 'c', 'g', 'i', 'f'])
         self.dic_words = (['GATO', 'GALO', 'LATA', 'GOL', 'TALO'], ['RETA', 'PARE', 'PERA'], ['FICA', 'FACA', 'CIA'])
         self.indice = 0
@@ -43,13 +47,10 @@ class ScreenSoletrar(Base):
     def control_menu_bt(self):
         self.go_back('ScreenStart',)
 
-
     def control_help_bt_img(self):
         self.help_enable = not self.help_enable
 
     def control_skip_bt(self):
-        pg.mixer.music.load('sounds/small-applause-6695.mp3')#test sound
-        pg.mixer.music.play()
         if self.indice < len(self.scenario) - 1: 
             self.indice += 1
         else:
@@ -61,6 +62,20 @@ class ScreenSoletrar(Base):
         self.alfabeto_4_image = pg.image.load('images/soletra/' + self.current_scenario[3] + '.png').convert_alpha()
         self.alfabeto_5_image = pg.image.load('images/soletra/' + self.current_scenario[4] + '.png').convert_alpha()
 
+    def check_formed_word(self):
+        palavra_cubos = ''
+        for key in self.slots_serial.slots_plataforma.keys() :
+            palavra_cubos += self.dic_esp32[key]
+        if len(palavra_cubos) > 3:
+            for p in self.dic_words[self.indice]:
+                if p == palavra_cubos:
+                    self.musics.congratulations()
+                    self.indice += 1
+                    self.control_skip_bt()
+                else:
+                    self.musics.game_Over()
+                    self.slots_serial.clean_slots()
+
 
     def process_input(self, events, pressed_keys):
         for event in events:
@@ -70,7 +85,11 @@ class ScreenSoletrar(Base):
             self.close_help_bt_img.check_event(event)
 
     def render(self):
+        self.dic_esp32 = self.slots_serial.get_slots()
+        self.check_formed_word()
+        print(self.dic_esp32)
         super(ScreenSoletrar, self).render()
+        self.screen.blit(self.logo_game, (0, 0))
         self.skip_bt.update(self.screen)
         self.menu_bt.update(self.screen)
         self.help_bt_img.update(self.screen)
@@ -80,5 +99,6 @@ class ScreenSoletrar(Base):
         self.screen.blit(self.alfabeto_3_image, (360, 410)) #inferior direito
         self.screen.blit(self.alfabeto_5_image, (230, 320)) #central
         if self.help_enable:
+            self.screen.fill((232, 232, 232, 128))
             self.screen.blit(self.help_img, (242, 140))
             self.close_help_bt_img.update(self.screen)

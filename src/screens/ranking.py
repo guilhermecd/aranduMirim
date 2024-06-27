@@ -7,14 +7,15 @@ class Ranking(Base):
     """RANKING COM PONTUAÇÃO DOS JOGADORES"""
 
     def __init__(self, screen):
-        Base.__init__(self, "RANKING", screen)
+        Base.__init__(self, "", screen)
         self.screen = screen
+        self.logo_game = pg.image.load('images/Arandu-Mirim-Ranking.png').convert_alpha()
         list_content = ('1', 'Guilherme', '95', '22/06/24',
                         '2', 'Michel', '80', '22/05/24',
                         '3', 'Marri', '80', '22/05/24')
 
         self.scrollist = ScrollList(('Posição', 'Nome', 'Pontos', 'Data'),
-                                    list_content, (50, 100))
+                                    list_content, (50, 150))
         
         BUTTON_STYLE = {
             'hover_color': BLACK,
@@ -39,5 +40,6 @@ class Ranking(Base):
 
     def render(self):
         super(Ranking, self).render()
+        self.screen.blit(self.logo_game, (0, 0))
         self.scrollist.update(self.screen)
         self.menu_bt.update(self.screen)

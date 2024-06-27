@@ -1,4 +1,5 @@
 import os
+
 # define some colors (R, G, B)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)

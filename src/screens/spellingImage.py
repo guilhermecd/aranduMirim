@@ -2,26 +2,26 @@ import pygame as pg
 from src.screens import Base
 from src.utils import ButtonImage, InputBox, Button
 from src.utils.settings import WHITE, BLACK
-
 import random
 
 class ScreenSpellingImage(Base):
     """Jogo para aprender ortografia"""
     
     def __init__(self, screen):
-        Base.__init__(self, "ORTOGRAFIA", screen)
+        Base.__init__(self, "", screen)
         self.screen = screen
+        self.logo_game = pg.image.load('images/Arandu-Mirim-Ortografia.png').convert_alpha()
         #help buttons
         self.help_bt_img = ButtonImage('images/duvidas32_32.png', (980, 20),
                                     self.control_help_bt_img, ())
-        self.close_help_bt_img = ButtonImage('images/close.png', (766, 120),
+        self.close_help_bt_img = ButtonImage('images/close.png', (758, 153),
                                     self.control_help_bt_img, ())
         self.help_enable = False
-        self.help_img = pg.image.load('images/helpme.jpg').convert_alpha()
-        self.close_help_img = pg.image.load('images/close.png').convert_alpha()
+        self.help_img = pg.image.load('images/Arandu-Mirim-Ortografia-com-FAQ.png').convert_alpha()
 
-        self.dic_image = {1 : "GATO", 2 : "URSO", 3 : "TATU", 4 : "LEAO", 5 : "VACA", 6 : "LOBO", 7: "RATO", 8 : "PATO"}
-        self.image_name = [1, 2, 3, 4, 5, 6, 7, 8]
+        self.dic_image = {1 : "GATO", 2 : "URSO", 3 : "TATU", 4 : "LEAO", 5 : "VACA", 6 : "LOBO", 7: "RATO", 8 : "PATO", 9 : "FLOR",
+                          10: "CAFE", 11 : "LUVA", 12: "LEGO", 13 : "SAPO", 14 : "BOLA"}
+        self.image_name = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         random.shuffle(self.image_name) 
         self.indice = 0
         self.current_image = pg.image.load('images/ortografiaAnimais/' + str(self.image_name[self.indice]) + '.png').convert_alpha()
@@ -29,7 +29,7 @@ class ScreenSpellingImage(Base):
         self.letter2_ibox = InputBox(293, 330, 100, 150, WHITE, WHITE, font_size=190, text='A')
         self.letter3_ibox = InputBox(393, 330, 100, 150, WHITE, WHITE, font_size=190, text='T')
         self.letter4_ibox = InputBox(493, 330, 100, 150, WHITE, WHITE, font_size=190, text='O')
-        self.dic_esp32 = {1 : 'G', 2 : 'A', 3 : 'T', 4 : 'O'}
+        self.dic_esp32 = {1 : '', 2 : '', 3 : '', 4 : ''}
         BUTTON_STYLE = {
             'hover_color': BLACK,
             'clicked_color': BLACK,
@@ -74,6 +74,8 @@ class ScreenSpellingImage(Base):
 
     def render(self):
         super(ScreenSpellingImage, self).render()
+        self.screen.blit(self.logo_game, (0, 0))
+        self.check_formed_word()
         self.skip_bt.update(self.screen)
         self.menu_bt.update(self.screen)
         self.letter1_ibox.draw(self.screen)
@@ -85,8 +87,8 @@ class ScreenSpellingImage(Base):
         self.letter4_ibox.draw(self.screen)
         self.letter4_ibox.update()
         self.help_bt_img.update(self.screen)
-        self.screen.blit(self.current_image, (240, 90))
+        self.screen.blit(self.current_image, (437, 130))
         if self.help_enable:
-            self.screen.blit(self.help_img, (242, 140))
+            self.screen.fill((232, 232, 232))
+            self.screen.blit(self.help_img, (0, 0))
             self.close_help_bt_img.update(self.screen)
-        self.check_formed_word()
