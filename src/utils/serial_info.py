@@ -7,7 +7,7 @@ import time
 class SerialInfo(threading.Thread):
     def __init__(self, data_queue):
         super().__init__()
-        self.serial_port = '/dev/ttyUSB0'  # ou 'COM3' dependendo do sistema operacional
+        self.serial_port = 'COM3'  # ou 'COM3' dependendo do sistema operacional
         self.baud_rate = 9600
         self.data_queue = data_queue
         self.my_serial = self.init_serial()

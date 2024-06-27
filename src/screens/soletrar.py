@@ -36,10 +36,9 @@ class ScreenSoletrar(Base):
         self.scenario = (['a', 'g', 'o', 't', 'l'], ['e', 'r', 't', 'p', 'a'], ['a', 'c', 'g', 'i', 'f'])
         self.dic_words = (['GATO', 'GALO', 'GOL', 'AGTO', 'GOTA', 'AGOA', 'GOTA', 'ALGA', 'LOGO'],
                   ['RETA', 'PARE', 'PERA', 'REPA', 'PARA', 'RAPA', 'ETAR', 'TERA', 'PATA', 'PETA', 'AERO', 'RETA', 'PERE'],
-                  ['FICA', 'FACA', 'CIA', 'FIGA', 'CIGA', 'CIGA', 'FICA', 'FACA', 'FIGA', 'FICA', 'CIFA', 'CIFRA', 'FICAR', 'RIFA', 'RIFA', 'FICRA', 'CIFRA', 'FIGA', 'CIFRA', 'FICA'])
-
-
+                  ['FICA', 'FACA', 'CIA', 'FIGA', 'CIGA', 'CIGA', 'FICA', 'FACA', 'FIGA', 'FICA', 'CIFA', 'CIFRA', 'FICAR', 'RIFA', 'RIFA', 'FICRA', 'CIFRA', 'FIGA', 'CIFRA', 'FICA'])        
         self.indice = 0
+        self.current_scenario = self.scenario[self.indice]
         self.cache_images()
         self.load_scenario_images()
 
@@ -64,20 +63,26 @@ class ScreenSoletrar(Base):
         self.palavras_acertadas = [[], [], []]
         self.total_palavras_acertadas = 0
 
+    
     def cache_images(self):
         self.images_cache = {}
-        for scenario in self.scenario:
-            for letter in scenario:
-                if letter not in self.images_cache:
-                    self.images_cache[letter] = pg.image.load(f'images/soletra/{letter}.png').convert_alpha()
+        for letter in self.current_scenario:
+            print(self.dic_esp32.values())
+            if letter.upper() in self.dic_esp32.values():
+                self.images_cache[letter] = pg.image.load(f'images/soletra/Soletra-{letter}.png').convert_alpha()
+            else:
+                self.images_cache[letter] = pg.image.load(f'images/soletra/{letter}.png').convert_alpha()
+        self.alfabeto_images = [self.images_cache[letter] for letter in self.current_scenario]
 
     def load_scenario_images(self):
         self.start_time = time.time()  # Reinicia o tempo de início do timer
         self.timer_active = True
         self.current_scenario = self.scenario[self.indice]
-        self.alfabeto_images = [self.images_cache[letter] for letter in self.current_scenario]
+
 
     def control_menu_bt(self):
+        self.slots_serial.stop()
+        self.slots_serial.join()
         self.go_back('ScreenStart',)
 
     def control_help_bt_img(self):
@@ -101,7 +106,6 @@ class ScreenSoletrar(Base):
                 self.palavras_acertadas[self.indice].append(palavra_cubos)  # Adiciona a palavra ao cenário atual
                 self.total_palavras_acertadas += 1
                 self.musics.points()
-                # self.control_skip_bt()
             else:
                 # self.musics.game_Over()
                 self.slots_serial.clean_slots()
@@ -118,6 +122,7 @@ class ScreenSoletrar(Base):
             self.dic_esp32 = self.data_queue.get()
         self.check_formed_word()
         print(self.dic_esp32)
+        self.cache_images()
         super(ScreenSoletrar, self).render()
         self.screen.blit(self.logo_game, (0, 0))
         # self.skip_bt.update(self.screen)
@@ -132,27 +137,28 @@ class ScreenSoletrar(Base):
             self.close_help_bt_img.update(self.screen)
 
         # Desenhar o timer na tela
-        font = pg.font.Font(None, 60)
-        timer_text = font.render(f'Tempo: {self.seconds_left}', True, BLACK)
-        self.screen.blit(timer_text, (560, 160))
+        if not self.help_enable:
+            font = pg.font.Font(None, 60)
+            timer_text = font.render(f'Tempo: {self.seconds_left}', True, BLACK)
+            self.screen.blit(timer_text, (560, 160))
 
-        # Exibir palavras acertadas por cenário
-        font_palavras = pg.font.Font(None, 25)
-        for i, palavras in enumerate(self.palavras_acertadas):
-            text = ', '.join(palavras)
-            text_render = font_palavras.render(f'Palavras Acertadas Cenário {i+1}: {text}', True, LIGHTGREY)
-            self.screen.blit(text_render, (570, 210 + i * 30))
+            # Exibir palavras acertadas por cenário
+            font_palavras = pg.font.Font(None, 25)
+            for i, palavras in enumerate(self.palavras_acertadas):
+                text = ', '.join(palavras)
+                text_render = font_palavras.render(f'Palavras Acertadas Cenário {i+1}: {text}', True, LIGHTGREY)
+                self.screen.blit(text_render, (570, 210 + i * 30))
 
-        # Atualizar o timer
-        if self.timer_active:
-            now = time.time()
-            elapsed = now - self.start_time
-            self.seconds_left = max(0, 60 - int(elapsed))  # Tempo total ajustado para 60 segundos
+            # Atualizar o timer
+            if self.timer_active:
+                now = time.time()
+                elapsed = now - self.start_time
+                self.seconds_left = max(0, 60 - int(elapsed))  # Tempo total ajustado para 60 segundos
 
-            # print(self.indice)
-            if self.seconds_left <= 0:
-                self.timer_active = False
-                self.control_skip_bt()
+                # print(self.indice)
+                if self.seconds_left <= 0:
+                    self.timer_active = False
+                    self.control_skip_bt()
             
 
         # Mostrar total de palavras acertadas no final dos 3 cenários
@@ -166,37 +172,3 @@ class ScreenSoletrar(Base):
             self.musics.congratulations()
             # time.sleep(3)
             self.control_menu_bt()
-
-    def cleanup(self):
-        self.slots_serial.stop()
-        self.slots_serial.join()
-
-def main():
-    try:
-        pg.init()
-        screen = pg.display.set_mode((1024, 600))
-        screen_soletrar = ScreenSoletrar(screen)
-        clock = pg.time.Clock()
-
-        running = True
-        while running:
-            events = pg.event.get()
-            for event in events:
-                if event.type == pg.QUIT:
-                    running = False
-
-            pressed_keys = pg.key.get_pressed()
-
-            screen.fill((255, 255, 255))
-            screen_soletrar.process_input(events, pressed_keys)
-            screen_soletrar.render()
-
-            pg.display.flip()
-            clock.tick(30)  # Limita a taxa de quadros a 30 FPS
-
-    finally:
-        screen_soletrar.cleanup()
-        pg.quit()
-
-if __name__ == '__main__':
-    main()
