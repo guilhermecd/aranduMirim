@@ -99,6 +99,6 @@ class ScreenSoletrar(Base):
         self.screen.blit(self.alfabeto_3_image, (360, 410)) #inferior direito
         self.screen.blit(self.alfabeto_5_image, (230, 320)) #central
         if self.help_enable:
-            self.screen.fill((232, 232, 232, 128))
-            self.screen.blit(self.help_img, (242, 140))
+            self.screen.fill((232, 232, 232))
+            self.screen.blit(self.help_img, (0, 0))
             self.close_help_bt_img.update(self.screen)

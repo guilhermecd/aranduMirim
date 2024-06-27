@@ -8,11 +8,11 @@ class ScreenStart(Base):
     def __init__(self, screen):
         Base.__init__(self, "", screen)
         self.screen = screen
-        self.soletrar_btn = ButtonImage('images/soletrar.png', (193, 330),
+        self.soletrar_btn = ButtonImage('images/soletrar.png', (200, 290),
                                     self.change_scene, (ScreenSoletrar,))
-        self.spelling_btn = ButtonImage('images/ortografia.png', (675, 330),
+        self.spelling_btn = ButtonImage('images/ortografia.png', (400, 290),
                                     self.change_scene, (ScreenSpellingImage,))
-        self.ranking_btn = ButtonImage('images/ranking.png', (675, 114),
+        self.ranking_btn = ButtonImage('images/ranking.png', (700, 290),
                                     self.change_scene, (Ranking,))
         self.logo_game = pg.image.load('images/aranduMirim.png').convert_alpha()
 
